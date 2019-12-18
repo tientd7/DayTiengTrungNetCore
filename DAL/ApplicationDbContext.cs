@@ -23,5 +23,6 @@ namespace DAL
         public DbSet<Course> Courses { set; get; }
         public DbSet<Lesson> Lessons { set; get; }
         public DbSet<Topic> Topics { set; get; }
+        public DbSet<FavoriteLesson> FavoriteLessons { set; get; }
     }
 }

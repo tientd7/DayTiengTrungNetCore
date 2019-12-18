@@ -30,9 +30,10 @@ namespace DTO
             ImageUrl = lesson.ImageUrl;
             VideoUrl = lesson.VideoUrl;
             Grama = lesson.Grama;
-            isVip = lesson.isVip;
+            isVip = lesson.IsVip;
             CourseId = lesson.CourseId;
             CourseName = courseName;
+            IsLike = false;
         }
         public int Id { set; get; }
         public string Name { set; get; }
@@ -43,5 +44,6 @@ namespace DTO
         public bool isVip { set; get; }
         public int CourseId { set; get; }
         public string CourseName { set; get; }
+        public bool IsLike { set; get; }
     }
 }

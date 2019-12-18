@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Entities
@@ -12,9 +13,10 @@ namespace Entities
         public string ImageUrl { set; get; }
         public string VideoUrl { set; get; }
         public string Grama { set; get; }
-        public bool isVip { set; get; }
+        public bool IsVip { set; get; }
         [ForeignKey("Course")]
         public int CourseId { set; get; }
         public virtual Course Course { set; get; }
+        public virtual ICollection<FavoriteLesson> FavoriteBys { set; get; } 
     }
 }

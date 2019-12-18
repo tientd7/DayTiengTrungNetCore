@@ -12,6 +12,8 @@ namespace DAL.Interface
     {
         IQueryable<TEntity> GetMany(Expression<Func<TEntity,bool>> expression);
         TEntity GetById(int id);
+        bool Exists(Expression<Func<TEntity, bool>> expression);
+        bool Exists(int id);
         void Add(TEntity entity);
         void AddRange(ICollection<TEntity> entities);
         void UpdateRange(ICollection<TEntity> entities);

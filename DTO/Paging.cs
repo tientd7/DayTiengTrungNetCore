@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-   public class Paging
+    
+    public class Paging
     {
         public Paging() { }
+
         public Paging(int totalRow, int pageSize, int pageIndex)
         {
             PageIndex = pageIndex;

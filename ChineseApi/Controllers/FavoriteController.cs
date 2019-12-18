@@ -13,40 +13,25 @@ namespace ChineseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class LessonsController : ControllerBase
+    [AllowAnonymous]
+    public class FavoriteController : ControllerBase
     {
-        private readonly ILessonBusiness _lesson;
+        private readonly IFavoriteBusiness _favorite;
         private string _userName = "";
-        private string _vip = "";
-        public LessonsController(ILessonBusiness lesson)
+        public FavoriteController(IFavoriteBusiness favorite)
         {
-            _lesson = lesson;
+            _favorite = favorite;
             
         }
-        // GET: api/Topics
+        // GET: api/Favorite
         [HttpGet]
-        public LessonDTO Get(int pageIndex = 1, int pageSize = 20)
-        {
-            LessonDTO rst = new LessonDTO();
-            try
-            {
-                rst = _lesson.GetAll(pageIndex, pageSize);
-            }
-            catch (Exception ex) { Console.WriteLine(ex.StackTrace); }
-            return rst;
-        }
-
-        // GET: api/Topics/5
-        [HttpGet("{id}")]
-        public LessonComponent Get(int id)
+        public FavoriteLessonDto Get(int pageIndex =1, int pageSize = 20)
         {
             if (User != null)
             {
                 try
                 {
                     _userName = User.FindFirst(ClaimTypes.Name).Value;
-                    _vip = User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 }
                 catch (Exception ex)
                 {
@@ -54,22 +39,40 @@ namespace ChineseApi.Controllers
                 }
 
             }
-            LessonComponent rst = new LessonComponent();
-            try
-            {
-                rst = _lesson.GetById(id, _userName, _vip);
-            }
-            catch (Exception ex) { Console.WriteLine(ex.StackTrace); }
-            return rst;
+            return _favorite.GetByUsername(_userName,pageIndex,pageSize);
         }
 
-        // POST: api/Lessons
+        // GET: api/Favorite/5
+        /// <summary>
+        /// Method like/unlike
+        /// </summary>
+        /// <param name="id">lessonId</param>
+        /// <returns>normaly is null, exception is a message!!</returns>
+        [HttpGet("{id}", Name = "Get")]
+        public string Get(int id)
+        {
+            if (User != null)
+            {
+                try
+                {
+                    _userName = User.FindFirst(ClaimTypes.Name).Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                }
+
+            }
+            return _favorite.LikeToggle(_userName,id);
+        }
+
+        // POST: api/Favorite
         [HttpPost]
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT: api/Lessons/5
+        // PUT: api/Favorite/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {

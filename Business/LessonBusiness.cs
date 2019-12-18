@@ -13,11 +13,13 @@ namespace Business
     public class LessonBusiness : ILessonBusiness
     {
         private readonly IRepository<Lesson> _repository;
+        private readonly IRepository<FavoriteLesson> _favorite;
         private readonly ICourseBusiness _course;
-        public LessonBusiness(IRepository<Lesson> repository, ICourseBusiness course)
+        public LessonBusiness(IRepository<Lesson> repository, ICourseBusiness course, IRepository<FavoriteLesson> favorite)
         {
             _repository = repository;
             _course = course;
+            _favorite = favorite;
         }
 
         public LessonDTO GetAll(int pageIndex = 1, int pageSize = 20, string vip = "")
@@ -38,8 +40,8 @@ namespace Business
                                   CourseId = s.CourseId,
                                   CourseName = s.Course.Name,
                                   Grama = s.Grama,
-                                  VideoUrl = (s.isVip!=string.IsNullOrEmpty(vip))?s.VideoUrl:"",
-                                  isVip = s.isVip
+                                  VideoUrl = (s.IsVip!=string.IsNullOrEmpty(vip))?s.VideoUrl:"",
+                                  isVip = s.IsVip
                               }).ToList();
             return rst;
         }
@@ -64,13 +66,13 @@ namespace Business
                                   CourseId = s.CourseId,
                                   CourseName = s.Course.Name,
                                   Grama = s.Grama,
-                                  VideoUrl = (s.isVip != string.IsNullOrEmpty(vip)) ? s.VideoUrl : "",
-                                  isVip = s.isVip
+                                  VideoUrl = (s.IsVip != string.IsNullOrEmpty(vip)) ? s.VideoUrl : "",
+                                  isVip = s.IsVip
                               }).ToList();
             return rst;
         }
 
-        public LessonComponent GetById(int lessonId, string vip = "")
+        public LessonComponent GetById(int lessonId, string userName, string vip = "")
         {
             var lesson = _repository.FirstOrDefault(e => e.Id == lessonId && e.Course.IsEnable);
             if (lesson == null)
@@ -79,6 +81,9 @@ namespace Business
             
             var rst = new LessonComponent(lesson, _course.GetById(lesson.CourseId).Name);
             rst.VideoUrl = (rst.isVip != string.IsNullOrEmpty(vip)) ? rst.VideoUrl : "";
+            rst.IsLike = _favorite.Exists(f => f.LessonID == lessonId && f.UserName.Equals(userName) && f.IsLike);
+
+
             return rst;
         }
     }

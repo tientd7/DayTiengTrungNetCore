@@ -39,6 +39,22 @@ namespace DAL
             _context.SaveChanges();
         }
 
+        public bool Exists(Expression<Func<TEntity, bool>> expression)
+        {
+            var rst = FirstOrDefault(expression);
+            if (rst == null)
+                return false;
+            return true;
+        }
+
+        public bool Exists(int id)
+        {
+            var rst = GetById(id);
+            if (rst == null)
+                return false;
+            return true;
+        }
+
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> expression)
         {
             return _context.Set<TEntity>().FirstOrDefault(expression);

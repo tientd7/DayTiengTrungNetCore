@@ -10,7 +10,7 @@ namespace Business.Interface
     public interface ILessonBusiness
     {
         LessonDTO GetByCourse(int courseId, int pageIndex = 1, int pageSize = 20, string vip = "");
-        LessonComponent GetById(int lessonId, string vip = "");
+        LessonComponent GetById(int lessonId, string userName, string vip = "");
         LessonDTO GetAll(int pageIndex = 1, int pageSize = 20, string vip = "");
     }
 }

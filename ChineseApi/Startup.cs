@@ -82,6 +82,7 @@ namespace ChineseApi
             services.AddScoped<ICourseBusiness, CourseBusiness>();
             services.AddScoped<ITopicBusiness, TopicBusiness>();
             services.AddScoped<ILessonBusiness, LessonBusiness>();
+            services.AddScoped<IFavoriteBusiness, FavoriteBusiness>();
             services.AddScoped<IAccountManager, AccountManager>();
         }
 
