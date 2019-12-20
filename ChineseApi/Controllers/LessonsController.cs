@@ -13,7 +13,7 @@ namespace ChineseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class LessonsController : ControllerBase
     {
         private readonly ILessonBusiness _lesson;
