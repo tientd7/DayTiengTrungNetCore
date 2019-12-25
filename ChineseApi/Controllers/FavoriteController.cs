@@ -13,7 +13,7 @@ namespace ChineseApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [AllowAnonymous]
     public class FavoriteController : ControllerBase
     {
         private readonly IFavoriteBusiness _favorite;
@@ -25,7 +25,7 @@ namespace ChineseApi.Controllers
         }
         // GET: api/Favorite
         [HttpGet]
-        public FavoriteLessonDto Get(int pageIndex =1, int pageSize = 20)
+        public IActionResult Get(int pageIndex =1, int pageSize = 20)
         {
             if (User != null)
             {
@@ -36,10 +36,11 @@ namespace ChineseApi.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.StackTrace);
+                    return BadRequest(new Response("400","Badrequest"));
                 }
 
             }
-            return _favorite.GetByUsername(_userName,pageIndex,pageSize);
+            return Ok(_favorite.GetByUsername(_userName,pageIndex,pageSize));
         }
 
         // GET: api/Favorite/5
@@ -49,7 +50,7 @@ namespace ChineseApi.Controllers
         /// <param name="id">lessonId</param>
         /// <returns>normaly is null, exception is a message!!</returns>
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
             if (User != null)
             {
@@ -60,10 +61,14 @@ namespace ChineseApi.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.StackTrace);
+                    return BadRequest(new Response("400", "Badrequest"));
                 }
 
             }
-            return _favorite.LikeToggle(_userName,id);
+            string msg = _favorite.LikeToggle(_userName,id);
+            if (string.IsNullOrEmpty(msg))
+                return Ok(new Response("200","Success"));
+            return NotFound();
         }
 
         // POST: api/Favorite
