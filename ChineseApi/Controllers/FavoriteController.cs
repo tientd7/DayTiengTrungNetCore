@@ -36,7 +36,7 @@ namespace ChineseApi.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.StackTrace);
-                    return BadRequest(new Response("400","Badrequest"));
+                    return Unauthorized(new Response("401", "Error: Unauthorized"));
                 }
 
             }
@@ -61,7 +61,7 @@ namespace ChineseApi.Controllers
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.StackTrace);
-                    return BadRequest(new Response("400", "Badrequest"));
+                    return Unauthorized(new Response("401", "Error: Unauthorized"));
                 }
 
             }
