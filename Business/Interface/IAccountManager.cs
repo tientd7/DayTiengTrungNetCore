@@ -8,5 +8,6 @@ namespace Business.Interface
     public interface IAccountManager
     {
         CheckLoginDto CheckLogin(LoginDto login);
+        string CreateUser(RegisterDto register);
     }
 }

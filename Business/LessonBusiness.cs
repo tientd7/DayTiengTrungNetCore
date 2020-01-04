@@ -52,7 +52,7 @@ namespace Business
             rst.Course = _course.GetById(courseId);
             if (rst.Course == null)
                 return null;
-            var query = _repository.GetMany(e => e.CourseId==courseId).OrderBy(t => t.Name);
+            var query = _repository.GetMany(e => e.CourseId == courseId).OrderBy(t => t.Name);
 
             rst.Pager = new Paging(query.Count(), pageSize, pageIndex);
             rst.Components = (from s in query.Skip((pageIndex - 1) * pageSize).Take(pageSize)

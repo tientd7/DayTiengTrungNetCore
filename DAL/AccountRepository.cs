@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace DAL
@@ -11,12 +13,18 @@ namespace DAL
         public static string MSG_CouldNotFoundTheUser = "Không tồn tại tên đăng nhập này!";
         public static string MSG_WrongPwd = "Sai mật khẩu!";
         public static string MSG_Disable = "Tài khoản bị khóa!";
+        public static string MSG_Duplicate = "Tài khoản đã tồn tại trong hệ thống!";
+        public static string MSG_CreateErr = "Thêm tài khoản thất bại, liên hệ quản trị hệ thống!";
+        public static string MSG_Success = "Thành công!";
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signinManager;
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signinManager)
+        private readonly IRepository<ApplicationUser> _repository;
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signinManager, IRepository<ApplicationUser> repository)
         {
             _signinManager = signinManager;
             _userManager = userManager;
+            _repository = repository;
         }
         public bool CheckLogin(string userName, string password, out string message, out ApplicationUser user, out IList<String> roles)
         {
@@ -41,6 +49,38 @@ namespace DAL
             roles = _userManager.GetRolesAsync(user).Result;
             message = "";
             return true;
+        }
+
+        public string CreateUser(ApplicationUser CreateUser)
+        {
+            string msg = "";
+            var user = _userManager.FindByNameAsync(CreateUser.UserName).Result;
+            if(user!= null)
+            {
+                msg = MSG_Duplicate;
+                return msg;
+            }
+            try
+            {
+                string pass = CreateUser.PasswordHash;
+                CreateUser.PasswordHash = "";
+                _userManager.CreateAsync(CreateUser, pass).Wait();
+                _userManager.AddToRoleAsync(CreateUser, RoleType.User).Wait();
+                msg = MSG_Success;
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                msg = MSG_CreateErr;
+                throw new Exception(msg);
+            }
+
+
+            return msg;
+        }
+
+        public IQueryable<ApplicationUser> GetAll(Expression<Func<ApplicationUser, bool>> expression)
+        {
+            return _repository.GetMany(expression);
         }
     }
 }

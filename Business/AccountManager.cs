@@ -35,6 +35,16 @@ namespace Business
             return checkLogin;
         }
 
-        
+        public string CreateUser(RegisterDto register)
+        {
+            ApplicationUser user = new ApplicationUser();
+            user.UserName = register.UserName;
+            user.PhoneNumber = register.PhoneNumber;
+            user.PhoneNumberConfirmed = true;
+            user.Email = register.Email;
+            user.IsEnable = true;
+            user.PasswordHash = register.Password;
+            return _account.CreateUser(user);
+        }
     }
 }

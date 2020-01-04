@@ -2,12 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace DAL
 {
+    public static class RoleType
+    {
+        public static string Admin = "Admin";
+        public static string Editor = "Editor";
+        public static string User = "User";
+    }
     public static class InitSeedData
     {
-        private static string[] roles = { "Admin", "Editor", "User" };
+       // private static string[] roles = { "Admin", "Editor", "User" };
         private static ApplicationUser[] users =
             {
                 new ApplicationUser()
@@ -63,16 +70,16 @@ namespace DAL
                         switch (user.UserName)
                         {
                             case "admin":
-                                userManager.AddToRoleAsync(user, "Admin").Wait();
-                                userManager.AddToRoleAsync(user, "Editor").Wait();
-                                userManager.AddToRoleAsync(user, "User").Wait();
+                                userManager.AddToRoleAsync(user, RoleType.Admin).Wait();
+                                userManager.AddToRoleAsync(user, RoleType.Editor).Wait();
+                                userManager.AddToRoleAsync(user, RoleType.User).Wait();
                                 break;
                             case "editor":
-                                userManager.AddToRoleAsync(user, "Editor").Wait();
-                                userManager.AddToRoleAsync(user, "User").Wait();
+                                userManager.AddToRoleAsync(user, RoleType.Editor).Wait();
+                                userManager.AddToRoleAsync(user, RoleType.User).Wait();
                                 break;
                             default:
-                                userManager.AddToRoleAsync(user, "User").Wait();
+                                userManager.AddToRoleAsync(user, RoleType.User).Wait();
                                 break;
                         }
 
@@ -83,6 +90,7 @@ namespace DAL
 
         private static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {
+            var roles = typeof(RoleType).GetFields().Where(f => f.FieldType == typeof(string)).Select(t=>t.GetValue(null).ToString()).ToArray();
             foreach (string role in roles)
             {
                 if (!roleManager.RoleExistsAsync(role).Result)
