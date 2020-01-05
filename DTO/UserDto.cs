@@ -23,4 +23,9 @@ namespace DTO
         public string Password { set; get; }
         public string ConfirmPassword { set; get; }
     }
+    public class ResetPassword
+    {
+        public string UserName { set; get; }
+        public string Email { set; get; }
+    }
 }

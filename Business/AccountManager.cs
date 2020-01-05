@@ -27,7 +27,15 @@ namespace Business
                 throw new Exception(msg);
             return msg;
         }
+        public string ResetPassword(ResetPassword reset)
+        {
+            string msg;
+            var check = _account.ResetPassword(reset.UserName, reset.Email, out msg);
+            if (!check)
+                throw new Exception(msg);
 
+            return msg;
+        }
         public CheckLoginDto CheckLogin(LoginDto login)
         {
             string message = "";

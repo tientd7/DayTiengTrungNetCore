@@ -10,5 +10,6 @@ namespace Business.Interface
         CheckLoginDto CheckLogin(LoginDto login);
         string CreateUser(RegisterDto register);
         string ChangePassword(string UserName, ChangePassDto changePass);
+        string ResetPassword(ResetPassword reset);
     }
 }

@@ -21,12 +21,23 @@ namespace ChineseApi.Controllers
         {
             _account = account;
         }
-        //// GET: api/Users
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+        // GET: api/Users
+        [HttpPost]
+        [Route("ResetPassword")]
+        public IActionResult Post([FromBody]ResetPassword reset)
+        {
+            string msg = "";
+            try
+            {
+                msg = _account.ResetPassword(reset);
+                return Ok(new Response("200", msg));
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
+                return BadRequest(new Response("400", ex.Message));
+            }
+        }
 
         //// GET: api/Users/5
         //[HttpGet("{id}", Name = "Get")]
