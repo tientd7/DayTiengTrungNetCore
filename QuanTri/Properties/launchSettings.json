@@ -18,7 +18,7 @@
     "QuanTri": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "http://localhost:5000",
+      "applicationUrl": "http://Bonbeo2012.ddns.net:82",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
