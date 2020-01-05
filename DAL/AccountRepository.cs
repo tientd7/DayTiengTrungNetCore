@@ -44,7 +44,7 @@ namespace DAL
         }
         private bool CheckLogin(string userName, string password, out string message,out ApplicationUser user)
         {
-            user = _userManager.FindByNameAsync(userName).Result;
+            user = FindByName(userName);
             if (user == null)
             {
                 message = MSG_CouldNotFoundTheUser;
@@ -67,7 +67,7 @@ namespace DAL
         public string CreateUser(ApplicationUser CreateUser, string password)
         {
             string msg = "";
-            var user = _userManager.FindByNameAsync(CreateUser.UserName).Result;
+            var user = FindByName(CreateUser.UserName);
             if (user != null)
             {
                 msg = MSG_Duplicate;
@@ -137,6 +137,24 @@ namespace DAL
 
             message = MSG_Success + "\r\nMật khẩu mới của bạn là: "+ DEFAULT_PASS;
             return true;
+        }
+
+        public string UpdateUser(ApplicationUser user)
+        {
+            try
+            {
+                _repository.Update(user);
+                return "";
+            }catch(Exception ex)
+            {
+                return ex.StackTrace.ToString();
+            }
+        }
+
+        public ApplicationUser FindByName(string userName)
+        {
+            return _userManager.FindByNameAsync(userName).Result;
+
         }
     }
 }

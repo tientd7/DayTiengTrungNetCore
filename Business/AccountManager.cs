@@ -4,6 +4,8 @@ using DAL.Interface;
 using DTO;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Collections;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
@@ -64,6 +66,55 @@ namespace Business
             user.Email = register.Email;
             user.IsEnable = true;
             return _account.CreateUser(user,register.Password);
+        }
+
+        public IEnumerable<UserDto> GetAll(bool? isVip, bool? enable)
+        {
+            var query = from s in _account.GetAll(t => 
+                ((isVip.HasValue && t.IsVip == isVip.Value) || (!isVip.HasValue)) &&
+                ((enable.HasValue && t.IsEnable == enable.Value) || (!enable.HasValue))) 
+                        
+                        select new UserDto()
+                        {
+                            Email = s.Email,
+                            Enable = s.IsEnable,
+                            IsVip = s.IsVip,
+                            VipExpDate = s.VipExp,
+                            PhoneNumber = s.PhoneNumber,
+                            UserName = s.UserName
+                        };
+            return query;
+        }
+
+        public UserDto GetByUserName(string userName)
+        {
+            var query = (from s in _account.GetAll(t=>t.UserName.Equals(userName))
+                        select new UserDto()
+                        {
+                            Email = s.Email,
+                            Enable = s.IsEnable,
+                            IsVip = s.IsVip,
+                            VipExpDate = s.VipExp,
+                            PhoneNumber = s.PhoneNumber,
+                            UserName = s.UserName
+                        }).FirstOrDefault();
+            return query;
+        }
+
+        public string UpdateUser(UserDto user)
+        {
+            var AppUser = _account.FindByName(user.UserName);
+            if(AppUser== null)
+            {
+                throw new Exception("Không tồn tại tài khoản này!");
+            }
+            AppUser.Email = user.Email;
+            AppUser.PhoneNumber = user.PhoneNumber;
+            AppUser.IsEnable = user.Enable;
+            AppUser.IsVip = user.IsVip;
+            AppUser.VipExp = user.VipExpDate;
+            string msg = _account.UpdateUser(AppUser);
+            return msg;
         }
     }
 }

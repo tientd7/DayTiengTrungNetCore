@@ -1,0 +1,66 @@
+﻿@model IEnumerable<DTO.UserDto>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsVip)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VipExpDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enable)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsVip)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VipExpDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Enable)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id=item.UserName  }) |
+                @Html.ActionLink("Details", "Details", new {  id=item.UserName })
+                @*@Html.ActionLink("Delete", "Delete", new { id=item.UserName  })*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

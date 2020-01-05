@@ -13,5 +13,7 @@ namespace DAL.Interface
         IQueryable<ApplicationUser> GetAll(Expression<Func<ApplicationUser, bool>> expression);
         bool ChangePassword(string userName, string oldPassword,string newPassword, out string message);
         bool ResetPassword(string userName, string email, out string message);
+        string UpdateUser(ApplicationUser user);
+        ApplicationUser FindByName(string userName);
     }
 }
