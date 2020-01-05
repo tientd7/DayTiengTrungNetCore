@@ -11,6 +11,6 @@ namespace DAL.Interface
         bool CheckLogin(string userName, string password, out string message, out ApplicationUser user, out IList<String> roles);
         string CreateUser(ApplicationUser CreateUser, string password);
         IQueryable<ApplicationUser> GetAll(Expression<Func<ApplicationUser, bool>> expression);
-        
+        bool ChangePassword(string userName, string oldPassword,string newPassword, out string message);
     }
 }

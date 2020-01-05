@@ -16,6 +16,18 @@ namespace Business
         {
             _account = account;
         }
+
+        public string ChangePassword(string UserName, ChangePassDto changePass)
+        {
+            if (!changePass.Password.Equals(changePass.ConfirmPassword))
+                throw new Exception("Mật khẩu mới xác nhận không đúng!");
+            string msg;
+            var check = _account.ChangePassword(UserName, changePass.CurrentPassword, changePass.Password, out msg);
+            if (!check)
+                throw new Exception(msg);
+            return msg;
+        }
+
         public CheckLoginDto CheckLogin(LoginDto login)
         {
             string message = "";

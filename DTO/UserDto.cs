@@ -17,5 +17,10 @@ namespace DTO
         public string Email { set; get; }
         public string PhoneNumber { set; get; }
     }
-    
+    public class ChangePassDto
+    {
+        public string CurrentPassword { set; get; }
+        public string Password { set; get; }
+        public string ConfirmPassword { set; get; }
+    }
 }

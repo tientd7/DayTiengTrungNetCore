@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Business.Interface;
 using DTO;
@@ -35,6 +36,11 @@ namespace ChineseApi.Controllers
         //}
 
         // POST: api/Users
+        /// <summary>
+        /// Signup a new account
+        /// </summary>
+        /// <param name="register"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Post([FromBody] RegisterDto register)
         {
@@ -51,10 +57,78 @@ namespace ChineseApi.Controllers
         }
 
         //// PUT: api/Users/5
+        ///// <summary>
+        ///// Changepassword
+        ///// </summary>
+        ///// <param name="id">UserName</param>
+        ///// <param name="changePass">Json string</param>
         //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
+        //[Authorize]
+        //public IActionResult Put(string id, [FromBody] ChangePassDto changePass)
         //{
+        //    string userName = "";
+        //    if (User != null)
+        //    {
+        //        try
+        //        {
+        //            userName = User.FindFirst(ClaimTypes.Name).Value;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            Console.WriteLine(ex.StackTrace);
+        //            Console.WriteLine(new Response("401", "Error: Unauthorized"));
+        //            return Unauthorized(new Response("401", "Error: Unauthorized"));
+        //        }
+
+        //    }
+        //    try
+        //    {
+        //        string mess = _account.ChangePassword(userName, changePass);
+        //        return Ok(new Response("200", mess));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(new Response("400", ex.Message));
+        //    }
         //}
+
+
+
+
+        // POST: api/Users/ChangePass
+        /// <summary>
+        /// Changepassword
+        /// </summary>
+        /// <param name="changePass">Json string</param>
+        [HttpPost]
+        [Route("ChangePass")]
+        [Authorize]
+        public IActionResult Post([FromBody] ChangePassDto changePass)
+        {
+            string userName = "";
+            if (User != null)
+            {
+                try
+                {
+                    userName = User.FindFirst(ClaimTypes.Name).Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace);
+                    Console.WriteLine(new Response("401", "Error: Unauthorized"));
+                    return Unauthorized(new Response("401", "Error: Unauthorized"));
+                }
+
+            }
+            try
+            {
+                string mess = _account.ChangePassword(userName, changePass);
+                return Ok(new Response("200", mess));
+            }catch(Exception ex)
+            {
+                return BadRequest(new Response("400", ex.Message));
+            }
+        }
 
         //// DELETE: api/ApiWithActions/5
         //[HttpDelete("{id}")]

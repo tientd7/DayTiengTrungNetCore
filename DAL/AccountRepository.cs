@@ -14,7 +14,7 @@ namespace DAL
         public static string MSG_WrongPwd = "Sai mật khẩu!";
         public static string MSG_Disable = "Tài khoản bị khóa!";
         public static string MSG_Duplicate = "Tài khoản đã tồn tại trong hệ thống!";
-        public static string MSG_CreateErr = "Thêm tài khoản thất bại, liên hệ quản trị hệ thống!";
+        public static string MSG_CreateErr = "Thao tác thất bại, liên hệ quản trị hệ thống!";
         public static string MSG_Success = "Thành công!";
 
         private readonly UserManager<ApplicationUser> _userManager;
@@ -29,6 +29,17 @@ namespace DAL
         public bool CheckLogin(string userName, string password, out string message, out ApplicationUser user, out IList<String> roles)
         {
             roles = null;
+            var check = CheckLogin(userName, password, out message, out user);
+            if (!check)
+            {
+                return false;
+            }
+            roles = _userManager.GetRolesAsync(user).Result;
+            message = "";//empty is success
+            return true;
+        }
+        private bool CheckLogin(string userName, string password, out string message,out ApplicationUser user)
+        {
             user = _userManager.FindByNameAsync(userName).Result;
             if (user == null)
             {
@@ -46,11 +57,9 @@ namespace DAL
                 message = MSG_WrongPwd;
                 return false;
             }
-            roles = _userManager.GetRolesAsync(user).Result;
-            message = "";
+            message = MSG_Success;
             return true;
         }
-
         public string CreateUser(ApplicationUser CreateUser, string password)
         {
             string msg = "";
@@ -84,6 +93,23 @@ namespace DAL
         public IQueryable<ApplicationUser> GetAll(Expression<Func<ApplicationUser, bool>> expression)
         {
             return _repository.GetMany(expression);
+        }
+
+        public bool ChangePassword(string userName, string oldPassword, string newPassword, out string message)
+        {
+            ApplicationUser user;
+            var check = CheckLogin(userName, oldPassword, out message, out user);
+            if (!check)
+                return false;
+            var rst = _userManager.ChangePasswordAsync(user, oldPassword, newPassword).Result;
+            if (!rst.Succeeded)
+            {
+                message = MSG_CreateErr;
+                return false;
+            }
+            message = MSG_Success;
+            return true;
+
         }
     }
 }
