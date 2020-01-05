@@ -43,8 +43,7 @@ namespace Business
             user.PhoneNumberConfirmed = true;
             user.Email = register.Email;
             user.IsEnable = true;
-            user.PasswordHash = register.Password;
-            return _account.CreateUser(user);
+            return _account.CreateUser(user,register.Password);
         }
     }
 }

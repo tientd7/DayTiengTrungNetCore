@@ -30,7 +30,7 @@ namespace DAL
         {
             roles = null;
             user = _userManager.FindByNameAsync(userName).Result;
-            if(user==null)
+            if (user == null)
             {
                 message = MSG_CouldNotFoundTheUser;
                 return false;
@@ -41,7 +41,7 @@ namespace DAL
                 return false;
             }
             var check = _signinManager.CheckPasswordSignInAsync(user, password, false).Result;
-            if(!check.Succeeded)
+            if (!check.Succeeded)
             {
                 message = MSG_WrongPwd;
                 return false;
@@ -51,23 +51,26 @@ namespace DAL
             return true;
         }
 
-        public string CreateUser(ApplicationUser CreateUser)
+        public string CreateUser(ApplicationUser CreateUser, string password)
         {
             string msg = "";
             var user = _userManager.FindByNameAsync(CreateUser.UserName).Result;
-            if(user!= null)
+            if (user != null)
             {
                 msg = MSG_Duplicate;
                 return msg;
             }
             try
             {
-                string pass = CreateUser.PasswordHash;
-                CreateUser.PasswordHash = "";
-                _userManager.CreateAsync(CreateUser, pass).Wait();
-                _userManager.AddToRoleAsync(CreateUser, RoleType.User).Wait();
-                msg = MSG_Success;
-            }catch(Exception ex)
+                IdentityResult result = _userManager.CreateAsync(CreateUser, password).Result;
+                if (result.Succeeded)
+                {
+                    _userManager.AddToRoleAsync(CreateUser, RoleType.User).Wait();
+                    msg = MSG_Success;
+                }
+                else msg = MSG_CreateErr;
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
                 msg = MSG_CreateErr;
