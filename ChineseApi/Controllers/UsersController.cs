@@ -53,6 +53,7 @@ namespace ChineseApi.Controllers
         /// <param name="register"></param>
         /// <returns></returns>
         [HttpPost]
+        [Route("Register")]
         public IActionResult Post([FromBody] RegisterDto register)
         {
             if (!register.Password.Equals(register.ConfirmPassword))
