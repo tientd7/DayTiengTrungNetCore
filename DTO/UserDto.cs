@@ -7,9 +7,9 @@ namespace DTO
 {
     public class UserDto
     {
-        [Required]
-        [Display(Name="User Name")]
-        public string UserName { set; get; }
+        //[Required]
+        //[Display(Name="User Name")]
+        //public string UserName { set; get; }
         [Required]
         [EmailAddress]
         public string Email { set; get; }
@@ -25,9 +25,9 @@ namespace DTO
     }
     public class RegisterDto
     {
-        [Required]
-        [Display(Name = "User Name")]
-        public string UserName { set; get; }
+        //[Required]
+        //[Display(Name = "User Name")]
+        //public string UserName { set; get; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { set; get; }
@@ -49,7 +49,7 @@ namespace DTO
     }
     public class ResetPassword
     {
-        public string UserName { set; get; }
+        public string PhoneNumber { set; get; }
         public string Email { set; get; }
     }
 }

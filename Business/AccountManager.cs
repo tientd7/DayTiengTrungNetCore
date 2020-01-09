@@ -32,7 +32,7 @@ namespace Business
         public string ResetPassword(ResetPassword reset)
         {
             string msg;
-            var check = _account.ResetPassword(reset.UserName, reset.Email, out msg);
+            var check = _account.ResetPassword(reset.PhoneNumber, reset.Email, out msg);
             if (!check)
                 throw new Exception(msg);
 
@@ -60,7 +60,7 @@ namespace Business
         public string CreateUser(RegisterDto register)
         {
             ApplicationUser user = new ApplicationUser();
-            user.UserName = register.UserName;
+            user.UserName = register.PhoneNumber;
             user.PhoneNumber = register.PhoneNumber;
             user.PhoneNumberConfirmed = true;
             user.Email = register.Email;
@@ -80,8 +80,7 @@ namespace Business
                             Enable = s.IsEnable,
                             IsVip = s.IsVip,
                             VipExpDate = s.VipExp,
-                            PhoneNumber = s.PhoneNumber,
-                            UserName = s.UserName
+                            PhoneNumber = s.PhoneNumber
                         };
             return query;
         }
@@ -95,15 +94,14 @@ namespace Business
                             Enable = s.IsEnable,
                             IsVip = s.IsVip,
                             VipExpDate = s.VipExp,
-                            PhoneNumber = s.PhoneNumber,
-                            UserName = s.UserName
+                            PhoneNumber = s.PhoneNumber
                         }).FirstOrDefault();
             return query;
         }
 
         public string UpdateUser(UserDto user)
         {
-            var AppUser = _account.FindByName(user.UserName);
+            var AppUser = _account.FindByName(user.PhoneNumber);
             if(AppUser== null)
             {
                 throw new Exception("Không tồn tại tài khoản này!");
