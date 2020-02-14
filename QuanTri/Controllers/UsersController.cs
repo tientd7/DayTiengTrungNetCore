@@ -91,7 +91,7 @@ namespace QuanTri.Controllers
         }
 
         // GET: Users/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete()//int id)
         {
             return View();
         }
